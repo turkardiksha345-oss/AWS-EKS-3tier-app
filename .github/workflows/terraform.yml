@@ -53,6 +53,7 @@ jobs:
     # ✅ 7. Build & Push Backend Image
     - name: Build & Push Backend
       run: |
+
         docker build -t ${{ secrets.DOCKER_USERNAME }}/easy-crud-backend:latest ./Application/backend
         docker push ${{ secrets.DOCKER_USERNAME }}/easy-crud-backend:latest
 
