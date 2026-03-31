@@ -78,3 +78,5 @@ jobs:
     - name: Deploy Application
       run: |
         kubectl apply -f Application/yaml/
+        kubectl apply -f Application/backend/yaml/
+        kubectl apply -f Application/frontend/yaml/
