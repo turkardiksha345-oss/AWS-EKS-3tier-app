@@ -2,6 +2,20 @@ provider "aws" {
   region = var.aws_region
 }
 
+# NETWORK
+
+data "aws_vpc" "default_vpc" {
+  default = true
+}
+
+data "aws_subnets" "default_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default_vpc.id]
+  }
+}
+
+
 # IAM ROLE FOR EKS CLUSTER
 
 resource "aws_iam_role" "eks_role" {
@@ -25,18 +39,6 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 }
 
 
-# NETWORK
-
-data "aws_vpc" "default_vpc" {
-  default = true
-}
-
-data "aws_subnets" "default_subnets" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default_vpc.id]
-  }
-}
 
 
 # EKS CLUSTER
@@ -44,14 +46,11 @@ data "aws_subnets" "default_subnets" {
 resource "aws_eks_cluster" "eks_cluster" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_role.arn
-  version  = "1.34"
-
-  access_config {
-    authentication_mode = "API"
-  }
+ 
 
   vpc_config {
     subnet_ids = data.aws_subnets.default_subnets.ids
+     endpoint_public_access = true
   }
 
   depends_on = [
@@ -99,9 +98,8 @@ resource "aws_eks_node_group" "eks_node_group" {
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "eks-node-group-1"
   node_role_arn   = aws_iam_role.eks_node_role.arn
-
   subnet_ids     = data.aws_subnets.default_subnets.ids
-  instance_types = ["m7i-flex.large"]
+  instance_types = ["t2.medium"]
 
   scaling_config {
     desired_size = var.desired_nodes
@@ -114,6 +112,7 @@ resource "aws_eks_node_group" "eks_node_group" {
   }
 
   depends_on = [
+    aws_eks_cluster.eks,
     aws_iam_role_policy_attachment.node_worker_policy,
     aws_iam_role_policy_attachment.node_cni_policy,
     aws_iam_role_policy_attachment.node_ecr_policy
