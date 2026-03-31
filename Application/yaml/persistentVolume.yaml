@@ -4,7 +4,7 @@ metadata:
   name: student-app-pv
 spec:
   capacity:
-    storage: 8Gi
+    storage: 30Gi
   volumeMode: Filesystem
   accessModes: 
     - ReadWriteOnce
@@ -12,7 +12,7 @@ spec:
   storageClassName: manual
   csi:
     driver: ebs.csi.aws.com
-    volumeHandle: vol-0cadc0868fb9c5749
+    volumeHandle: vol-0afae2d7152bd05a2
     fsType: ext4
     volumeAttributes: 
       storage.kubernetes.io/csiProvisionerIdentity: static

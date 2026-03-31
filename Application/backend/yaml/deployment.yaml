@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: student-app
+  name: student-app-backend
   labels: 
-    app: student-app
+    app: student-app-backend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: student-app
+      app: student-app-backend
   template:
     metadata:
       labels:
-        app: student-app
+        app: student-app-backend
     spec: 
       containers:
         - name: student-app-container
