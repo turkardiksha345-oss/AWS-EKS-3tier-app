@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "cluster_name" {
-  default = "my-cluster"
+  default = "my-eks-cluster"
 }
 
 
