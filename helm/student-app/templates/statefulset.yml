@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: student-db-sts
+spec:
+  serviceName: student-db-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-db
+  template:
+    metadata:
+      labels:
+        app: student-db
+    spec:
+      containers:
+      - name: db
+        image: {{ .Values.db.image }}
+        ports:
+        - containerPort: 3306

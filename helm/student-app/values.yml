@@ -1,0 +1,11 @@
+backend:
+  image: dikshat1024/student-backend:latest
+  replicas: 2
+
+frontend:
+  image: dikshat1024/student-frontend:latest
+  replicas: 1
+
+db:
+  image: mariadb:latest
+  storage: 10Gi
